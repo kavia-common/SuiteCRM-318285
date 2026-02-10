@@ -9,6 +9,7 @@ use Api\V8\Service\ModuleService;
 use Api\V8\Service\RelationshipService;
 use Api\V8\Service\UserPreferencesService;
 use Api\V8\Service\UserService;
+use Api\V8\Service\LeadService;
 use Psr\Container\ContainerInterface as Container;
 use League\OAuth2\Server\ResourceServer;
 
@@ -54,6 +55,11 @@ return CustomLoader::mergeCustomArray([
     Controller\RelationshipController::class => function (Container $container) {
         return new Controller\RelationshipController(
             $container->get(RelationshipService::class)
+        );
+    },
+    Controller\LeadsController::class => function (Container $container) {
+        return new Controller\LeadsController(
+            $container->get(LeadService::class)
         );
     },
 ], basename(__FILE__));

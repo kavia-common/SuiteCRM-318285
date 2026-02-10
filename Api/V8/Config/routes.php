@@ -26,62 +26,67 @@ $app->group('', function () use ($app) {
         $app->post('/logout', LogoutController::class);
 
         $app
-            ->get('/search-defs/module/{moduleName}', 'Api\V8\Controller\ListViewSearchController:getModuleSearchDefs')
+            ->get('/search-defs/module/{moduleName}', 'Api\\V8\\Controller\\ListViewSearchController:getModuleSearchDefs')
             ->add($paramsMiddlewareFactory->bind(Param\ListViewSearchParams::class));
 
         $app
-            ->get('/listview/columns/{moduleName}', 'Api\V8\Controller\ListViewController:getListViewColumns')
+            ->get('/listview/columns/{moduleName}', 'Api\\V8\\Controller\\ListViewController:getListViewColumns')
             ->add($paramsMiddlewareFactory->bind(Param\ListViewColumnsParams::class));
 
-        $app->get('/current-user', 'Api\V8\Controller\UserController:getCurrentUser');
+        $app->get('/current-user', 'Api\\V8\\Controller\\UserController:getCurrentUser');
 
-        $app->get('/meta/modules', 'Api\V8\Controller\MetaController:getModuleList');
+        $app->get('/meta/modules', 'Api\\V8\\Controller\\MetaController:getModuleList');
 
-        $app->get('/meta/fields/{moduleName}', 'Api\V8\Controller\MetaController:getFieldList')
+        $app->get('/meta/fields/{moduleName}', 'Api\\V8\\Controller\\MetaController:getFieldList')
             ->add($paramsMiddlewareFactory->bind(Param\GetFieldListParams::class));
 
         $app
-            ->get('/user-preferences/{id}', 'Api\V8\Controller\UserPreferencesController:getUserPreferences')
+            ->get('/user-preferences/{id}', 'Api\\V8\\Controller\\UserPreferencesController:getUserPreferences')
             ->add($paramsMiddlewareFactory->bind(Param\GetUserPreferencesParams::class));
 
         /**
          * Get swagger schema
          */
-        $app->get('/meta/swagger.json', 'Api\V8\Controller\MetaController:getSwaggerSchema');
+        $app->get('/meta/swagger.json', 'Api\\V8\\Controller\\MetaController:getSwaggerSchema');
+
+        /**
+         * Create a lead (custom simplified endpoint)
+         */
+        $app->post('/leads', 'Api\\V8\\Controller\\LeadsController:createLead');
 
         /**
          * Get module records
          */
         $app
-            ->get('/module/{moduleName}', 'Api\V8\Controller\ModuleController:getModuleRecords')
+            ->get('/module/{moduleName}', 'Api\\V8\\Controller\\ModuleController:getModuleRecords')
             ->add($paramsMiddlewareFactory->bind(Param\GetModulesParams::class));
 
         /**
          * Get a module record
          */
         $app
-            ->get('/module/{moduleName}/{id}', 'Api\V8\Controller\ModuleController:getModuleRecord')
+            ->get('/module/{moduleName}/{id}', 'Api\\V8\\Controller\\ModuleController:getModuleRecord')
             ->add($paramsMiddlewareFactory->bind(Param\GetModuleParams::class));
 
         /**
          * Create a module record
          */
         $app
-            ->post('/module', 'Api\V8\Controller\ModuleController:createModuleRecord')
+            ->post('/module', 'Api\\V8\\Controller\\ModuleController:createModuleRecord')
             ->add($paramsMiddlewareFactory->bind(Param\CreateModuleParams::class));
 
         /**
          * Update a module record
          */
         $app
-            ->patch('/module', 'Api\V8\Controller\ModuleController:updateModuleRecord')
+            ->patch('/module', 'Api\\V8\\Controller\\ModuleController:updateModuleRecord')
             ->add($paramsMiddlewareFactory->bind(Param\UpdateModuleParams::class));
 
         /**
          * Delete a module record
          */
         $app
-            ->delete('/module/{moduleName}/{id}', 'Api\V8\Controller\ModuleController:deleteModuleRecord')
+            ->delete('/module/{moduleName}/{id}', 'Api\\V8\\Controller\\ModuleController:deleteModuleRecord')
             ->add($paramsMiddlewareFactory->bind(Param\DeleteModuleParams::class));
 
         /**
@@ -90,7 +95,7 @@ $app->group('', function () use ($app) {
         $app
             ->get(
                 '/module/{moduleName}/{id}/relationships/{linkFieldName}',
-                'Api\V8\Controller\RelationshipController:getRelationship'
+                'Api\\V8\\Controller\\RelationshipController:getRelationship'
             )
             ->add($paramsMiddlewareFactory->bind(Param\GetRelationshipParams::class));
 
@@ -100,7 +105,7 @@ $app->group('', function () use ($app) {
         $app
             ->post(
                 '/module/{moduleName}/{id}/relationships',
-                'Api\V8\Controller\RelationshipController:createRelationship'
+                'Api\\V8\\Controller\\RelationshipController:createRelationship'
             )
             ->add($paramsMiddlewareFactory->bind(Param\CreateRelationshipParams::class));
 
@@ -110,7 +115,7 @@ $app->group('', function () use ($app) {
         $app
             ->post(
                 '/module/{moduleName}/{id}/relationships/{linkFieldName}',
-                'Api\V8\Controller\RelationshipController:createRelationshipByLink'
+                'Api\\V8\\Controller\\RelationshipController:createRelationshipByLink'
             )
             ->add($paramsMiddlewareFactory->bind(Param\CreateRelationshipByLinkParams::class));
 
@@ -120,7 +125,7 @@ $app->group('', function () use ($app) {
         $app
             ->delete(
                 '/module/{moduleName}/{id}/relationships/{linkFieldName}/{relatedBeanId}',
-                'Api\V8\Controller\RelationshipController:deleteRelationship'
+                'Api\\V8\\Controller\\RelationshipController:deleteRelationship'
             )
             ->add($paramsMiddlewareFactory->bind(Param\DeleteRelationshipParams::class));
 

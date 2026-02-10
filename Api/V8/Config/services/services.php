@@ -6,6 +6,7 @@ use Api\V8\JsonApi\Helper\AttributeObjectHelper;
 use Api\V8\JsonApi\Helper\PaginationObjectHelper;
 use Api\V8\JsonApi\Helper\RelationshipObjectHelper;
 use Api\V8\Service;
+use Api\V8\Service\LeadService;
 use Psr\Container\ContainerInterface as Container;
 use Api\Core\Loader\CustomLoader;
 
@@ -59,6 +60,13 @@ return CustomLoader::mergeCustomArray([
             $container->get(BeanManager::class),
             $container->get(AttributeObjectHelper::class),
             $container->get(PaginationObjectHelper::class)
+        );
+    },
+    LeadService::class => function (Container $container) {
+        return new LeadService(
+            $container->get(BeanManager::class),
+            $container->get(AttributeObjectHelper::class),
+            $container->get(RelationshipObjectHelper::class)
         );
     },
 ], basename(__FILE__));
