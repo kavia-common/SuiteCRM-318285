@@ -1,0 +1,143 @@
+openapi: 3.0.1
+info:
+  title: Lead Service API
+  description: |
+    Standalone lead-service API for creating leads.
+
+    This service currently supports creating a lead via `POST /leads`.
+  version: 1.0.0
+servers:
+  - url: http://localhost
+    description: Local development (adjust host/port as deployed)
+
+tags:
+  - name: Leads
+    description: Lead creation endpoints
+
+paths:
+  /leads:
+    post:
+      tags:
+        - Leads
+      operationId: createLead
+      summary: Create a lead
+      description: |
+        Creates a new lead using the minimal required data:
+        `lastName`, `email`, and `company`.
+
+        Request body must be JSON.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLeadRequest"
+            examples:
+              example:
+                summary: Minimal create lead request
+                value:
+                  lastName: Doe
+                  email: jane.doe@example.com
+                  company: Example Corp
+      responses:
+        "201":
+          description: Lead created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateLeadResponse"
+              examples:
+                created:
+                  summary: Lead created response
+                  value:
+                    id: "a1b2c3d4-e5f6-7890-abcd-ef0123456789"
+        "400":
+          description: Bad request (validation error or malformed JSON)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              examples:
+                validationError:
+                  summary: Missing required field
+                  value:
+                    error: Validation failed.
+                    details:
+                      - field: lastName
+                        message: lastName is required.
+        "415":
+          description: Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    CreateLeadRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - lastName
+        - email
+        - company
+      properties:
+        lastName:
+          type: string
+          description: Lead last name.
+          minLength: 1
+          example: Doe
+        email:
+          type: string
+          description: Lead email address.
+          format: email
+          minLength: 1
+          example: jane.doe@example.com
+        company:
+          type: string
+          description: Company name associated with the lead.
+          minLength: 1
+          example: Example Corp
+
+    CreateLeadResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the created lead.
+          example: a1b2c3d4-e5f6-7890-abcd-ef0123456789
+
+    ErrorDetail:
+      type: object
+      additionalProperties: false
+      required:
+        - field
+        - message
+      properties:
+        field:
+          type: string
+          description: The name of the field associated with the error.
+          example: lastName
+        message:
+          type: string
+          description: Human-readable explanation of the error.
+          example: lastName is required.
+
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          description: High-level error message.
+          example: Validation failed.
+        details:
+          type: array
+          description: Optional list of more granular error details.
+          items:
+            $ref: "#/components/schemas/ErrorDetail"
